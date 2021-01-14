@@ -1,0 +1,18 @@
+eriesCategory[$seriesIndex] = self::chartDataSeriesValueSet($seriesDetail, $namespacesChartMeta, $marker);
+                                break;
+                            case "yVal":
+                                $seriesValues[$seriesIndex] = self::chartDataSeriesValueSet($seriesDetail, $namespacesChartMeta, $marker);
+                                break;
+                        }
+                    }
+            }
+        }
+        return new PHPExcel_Chart_DataSeries($plotType, $multiSeriesType, $plotOrder, $seriesLabel, $seriesCategory, $seriesValues, $smoothLine);
+    }
+
+
+    private static function chartDataSeriesValueSet($seriesDetail, $namespacesChartMeta, $marker = null, $smoothLine = false)
+    {
+        if (isset($seriesDetail->strRef)) {
+            $seriesSource = (string) $seriesDetail->strRef->f;
+            $seriesData = self::chartDataSeriesValues($seriesDetail->strRef->strCache-

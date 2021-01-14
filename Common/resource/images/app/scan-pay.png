@@ -1,0 +1,50 @@
+dsData[0]['inSalesPrice'], $discount, 2) < 0.01 ? 0.01 : bcmul($goodsData[0]['inSalesPrice'], $discount, 2); //计算商品会员价
+						}
+						$orderGood['money'] = $goodsData[0]['inSalesPrice'];
+					}
+				} else {
+					if ($arr[$j]['groupId'] > 0) {
+						$groupMoney = pdo_get('ybcy_goods_spec_group', array('id' => $arr[$j]['groupId']), array('inSalesPrice', 'data'));
+						if ($good['isMember'] == 1) {
+							$orderGood['vipMoney'] = bcmul($groupMoney['inSalesPrice'], $discount, 2) < 0.01 ? 0.01 : bcmul($groupMoney['inSalesPrice'], $discount, 2); //计算商品会员价
+						}
+						$orderGood['money'] = $groupMoney['inSalesPrice'];
+						$orderGood['groupId'] = $arr[$j]['groupId'];
+						$orderGood['data'] = $groupMoney['data'];
+					} else {
+						if ($good['isMember'] == 1) {
+							$orderGood['vipMoney'] = bcmul($good['inSalesPrice'], $discount, 2) < 0.01 ? 0.01 : bcmul($good['inSalesPrice'], $discount, 2); //计算商品会员价
+						}
+						$orderGood['money'] = $good['inSalesPrice'];
+					}
+				}
+				if ($arr[$j]['material']) {
+					$materialInfo = $arr[$j]['material'];
+					$materialArr = array();
+					for ($m = 0; $m < count($materialInfo); $m++) {
+						$material = pdo_get('ybcy_material', array('id' => $materialInfo[$m]['materialId']), array('name', 'outPrice'));
+						$materialArr[] = array(
+							'id' => $materialInfo[$m]['materialId'],
+							'name' => $material['name'],
+							'inPrice' => $material['inPrice'],
+							'number' => $materialInfo[$m]['num'],
+						);
+					}
+
+					$orderGood['material'] = json_encode($materialArr);
+				}
+				pdo_insert('ybcy_instore_order_goods', $orderGood);
+			}
+		}
+
+	}
+
+	/**
+	 * [reduceStock 减库存]
+	 * @param  [type] $orderId [订单id]
+	 * @param  [type] $type    [1外卖2店内]
+	 * @return [type]          [description]
+	 */
+	static function reduceStock($orderId, $type = 1) {
+		if ($type == 1) {
+			$order = pdo_get

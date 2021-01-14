@@ -1,0 +1,16 @@
+<div class="card mb-3 {$random}">
+    <div class="card-block">
+        <div class="mb-3">
+            <a href="javascript:" data-index="{$random}" onclick="$(this).parent().parent().parent().remove()" class="del-rules-btn float-right">[-删除条目]</a>
+        </div>
+        <input type="hidden" name="random[]" value="{$random}" />
+        <input type="hidden" class='citys' name="citys[{$random}]" value="{$row['citys']}" />
+        <input type="hidden" class='citys_code' name="citys_code[{$random}]" value="{$row['citys_code']}" />
+        <div>
+            <span>省份：</span>
+            <span class="cityshtml">
+			{$row['citys']}
+			</span>
+        </div>
+    </div>
+</div>

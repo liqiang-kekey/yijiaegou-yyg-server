@@ -1,0 +1,29 @@
+# Windows
+[Dd]esktop.ini
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+
+# debug
+/examples
+/backup
+/dist
+/doc
+/h5
+ 
+# eclipse
+.project
+.setting
+.psd
+.zip
+
+*.min.js
+

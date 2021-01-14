@@ -1,0 +1,36 @@
+<div class="page-header">
+    当前位置：<span class="text-primary">积分兑换任务</span>
+</div>
+<div class="page-content" style="display: block;">
+    <div class="page-toolbar m-b-sm m-t-sm" style="margin-bottom: 0">
+        <div class="col-sm-4">
+            {ifp 'exchange.score.edit'}
+                <span class="">
+                    <a class="btn btn-primary btn-sm" href="{php echo webUrl('exchange/score/setting',array('id'=>0));}"><i class="fa fa-plus"></i> 添加积分兑换任务</a>
+                </span>
+            {/if}
+        </div>
+        <div class="col-sm-4 pull-right">
+            <div class="input-group">
+                <input type="text" class="input-sm form-control" name="keyword" id="keyword" value="" placeholder="请输入关键词">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" id="so">搜索</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <ul class="nav nav-arrow-next nav-tabs" id="myTab">
+        <li {if $_W['action'] == 'score'}class="active"{/if}>
+        <a href="{php echo webUrl('exchange/score')}">进行中 (<span class="goods-ing">{$allStart}</span>)</a>
+        </li>
+        <li {if $_W['action'] == 'score.nostart'}class="active"{/if}>
+        <a href="{php echo webUrl('exchange/score/nostart')}">未开始 (<span class="goods-ing">{$allNostart}</span>)</a>
+        </li>
+        <li {if $_W['action'] == 'score.end'}class="active"{/if}>
+        <a href="{php echo webUrl('exchange/score/end')}">已结束 (<span class="goods-sold">{$allEnd}</span>)</a>
+        </li>
+    </ul>
+    <script language="JavaScript" type="text/javascript">
+        function clearNoNum(obj){
+            obj.value = obj.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符
+         

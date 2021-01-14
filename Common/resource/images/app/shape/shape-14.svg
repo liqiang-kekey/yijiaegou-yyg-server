@@ -1,0 +1,24 @@
+$title, $legend, $plotArea, $plotVisOnly, $dispBlanksAs, $XaxisLabel, $YaxisLabel);
+
+        return $chart;
+    }
+
+    private static function chartTitle($titleDetails, $namespacesChartMeta, $type)
+    {
+        $caption = array();
+        $titleLayout = null;
+        foreach ($titleDetails as $titleDetailKey => $chartDetail) {
+            switch ($titleDetailKey) {
+                case "tx":
+                    $titleDetails = $chartDetail->rich->children($namespacesChartMeta['a']);
+                    foreach ($titleDetails as $titleKey => $titleDetail) {
+                        switch ($titleKey) {
+                            case "p":
+                                $titleDetailPart = $titleDetail->children($namespacesChartMeta['a']);
+                                $caption[] = self::parseRichText($titleDetailPart);
+                        }
+                    }
+                    break;
+                case "layout":
+                    $titleLayout = self::chartLayoutDetails($chartDetail, $namespacesChartMeta);
+                  

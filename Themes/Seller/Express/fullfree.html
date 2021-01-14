@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <?php $shoname_name = D('Home/Front')->get_config_by_name('shoname'); ?>
+    <title><?php echo $shoname; ?></title>
+    <link rel="shortcut icon" href="" />
+
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link href="./resource/css/bootstrap.min.css?v=201903260001" rel="stylesheet">
+    <link href="./resource/css/common.css?v=201903260001" rel="stylesheet">
+    <script type="text/javascript">
+        window.sysinfo = {
+        <?php if (!empty($_W['uniacid']) ){ ?>'uniacid': '{$_W['uniacid']}',<?php } ?>
+
+        <?php if( !empty($_W['acid'])  ){ ?>'acid': '{$_W['acid']}',<?php } ?>
+
+        <?php if (!empty($_W['openid']) ) { ?>'openid': '{$_W['openid']}',<?php } ?>
+
+        <?php if( !empty($_W['uid']) ) {  ?>'uid': '{$_W['uid']}',<?php } ?>
+
+        'isfounder': <?php if (!empty($_W['isfounder']) ) { ?>1<?php  }else{  ?>0<?php } ?>,
+
+        'siteroot': '{$_W['siteroot']}',
+            'siteurl': '{$_W['siteurl']}',
+            'attachurl': '{$_W['attachurl']}',
+            'attachurl_local': '{$_W['attachurl_local']}',
+            'attachurl_remote': '{$_W['attachurl_remote']}',
+            'module' : {'url' : '<?php if( defined('MODULE_URL') ) { ?>{MODULE_URL}<?php } ?>', 'name' : '<?php if (defined('IN_MODULE') ) { ?>{IN_MODULE}<?php } ?>'},
+        'cookie' : {'pre': ''},
+        'account' : {:json_encode($_W['account'])},
+        };
+    </script>
+
+    <script type="text/javascript" src="./resource/js/lib/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="./resource/js/lib/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./resource/js/app/util.js?v=201903260001"></script>
+    <script type="text/javascript" src="./resource/js/app/common.min.js?v=201903260001"></script>
+    <script type="text/javascript" src="./resource/js/require.js?v=201903260001"></script>
+    <script type="text/javascript" src="./resource/js/lib/jquery.nice-select.js?v=201903260001"></script>
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link href="/static/css/snailfish.css" rel="stylesheet">
+</head>
+<body layadmin-themealias="default">
+<style>
+    .mb-3 {
+        margin-bottom: 1rem!important;
+    }
+    .card {
+        position: relative;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+    }
+    .card-block {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 1 auto;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1.25rem;
+    }
+    .del-rules-btn{
+        color:#44abf7 !important;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header layui-elem-quote">当前位置：<span class="line-text">满额包邮配置</span></div>
+        <div class="layui-card-body" style="padding:15px;">
+            <form action="" method="post" class="layui-form" lay-filter="component-layui-form-item" enctype="multipart/form-data" >
+
+                <input type="hidden" name="data[id]" value="{$item['id']}" />
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        快递配送
+                    </label>
+                    <div class="layui-input-block">
+                        <label class='radio-inline'>
+                            <input type='radio' title="关闭" lay-filter="formexpress"  name='parameter[delivery_type_express]' value='2' <?php if(!isset($data['delivery_type_express']) || $data['delivery_type_express'] ==2){ ?> checked<?php }else{ ?> <?php } ?> />
+                        </label>
+                        <label class='radio-inline'>
+                            <input type='radio' title="开启" lay-filter="formexpress"  name='parameter[delivery_type_express]' value='1' <?php if( isset($data['delivery_type_express']) && $data['delivery_type_express'] ==1 ){ ?> checked<?php }else{ ?> <?php } ?>  />
+                        </label>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        运费组合策略
+                    </label>
+                    <div class='layui-input-block'>
+                        <div class="radio-inline">
+                            <div class="layui-input-inline">
+                                <input type='radio' title="叠加" lay-filter="formexpress"  name='parameter[freight_rule]' value='10' <?php if(!isset($data['freight_rule']) || $data['freight_rule'] ==10){ ?> checked<?php }else{ ?> <?php } ?> />
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">订单中的商品有多个运费模板时，将每个商品的运费之和订为订单总运费</div>
+                        </div>
+                    </div>
+                    <div class='layui-input-block'>
+                        <div class="radio-inline">
+                            <div class="layui-input-inline">
+                                <input type='radio' title="以最低运费结算" lay-filter="formexpress"  name='parameter[freight_rule]' value='20' <?php if(!isset($data['freight_rule']) || $data['freight_rule'] ==20){ ?> checked<?php }else{ ?> <?php } ?> />
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">订单中的商品有多个运费模板时，取订单中运费最少的商品的运费计为订单总运费</div>
+                        </div>
+                    </div>
+                    <div class='layui-input-block'>
+                        <div class="radio-inline">
+                            <div class="layui-input-inline">
+                                <input type='radio' title="以最高运费结算" lay-filter="formexpress"  name='parameter[freight_rule]' value='30' <?php if(!isset($data['freight_rule']) || $data['freight_rule'] ==30){ ?> checked<?php }else{ ?> <?php } ?> />
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">订单中的商品有多个运费模板时，取订单中运费最多的商品的运费计为订单总运费</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class='layui-input-block'>
+                        <div class="radio-inline">
+                            <div class="layui-input-inline">
+                                <input type="text" name="parameter[delivery_express_name]" value="{$data['delivery_express_name']}" class="layui-input" />
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">默认：快递配送（下单页面，配送方式变更为修改的名称）</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">"快递费"自定义</label>
+                    <div class='layui-input-block'>
+                        <div class="radio-inline">
+                            <div class="layui-input-inline">
+                                <input type="text" name="parameter[placeorder_trans_name]" value="{$data['placeorder_trans_name']}" class="layui-input" />
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">下单页面"快递费"文字自定义，默认：快递费</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">满额包邮</label>
+                    <div class='layui-input-block'>
+                        <div class="radio-inline" id="man_free_shipping" <?php if( isset($data['delivery_type_express']) && $data['delivery_type_express'] ==1 ){ ?> <?php }else{ ?> style="display:none;" <?php } ?> >
+                        <div class="layui-input-inline">
+                            <input type="text"  name="parameter[man_free_shipping]" value="{$data['man_free_shipping']}" class="layui-input" />
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">如果开启满额包邮，设置0为全场包邮</div>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="goods_form_item">
+                    <label class="layui-form-label">不参与包邮的商品</label>
+                    <div class="layui-input-block">
+                        <div class="input-group " style="margin: 0;">
+                            <input type="text" disabled value="" class="form-control valid" name="limit_goods_list" placeholder="" id="agent_id">
+                            <span class="input-group-btn">
+								<span data-input="#agent_id" id="chose_agent_id"  class="btn btn-default">不参与包邮的商品</span>
+							</span>
+                        </div>
+                        <?php if(!empty($limit_goods)){ ?>
+                        <?php foreach( $limit_goods as $goods ){ ?>
+                        <div class="input-group mult_choose_goodsid" data-gid="{$goods['gid']}" style="border-radius: 0;float: left;margin: 10px;margin-left:0px;width: 22%;">
+                            <div class="layadmin-text-center choose_user">
+                                <img style="" src="{$goods['image']}">
+                                <div class="layadmin-maillist-img" style="">{$goods['goodsname']}</div>
+                                <button type="button" class="layui-btn layui-btn-sm" onclick="cancle_bind(this)">
+                                    <i class="layui-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <?php }} ?>
+                    </div>
+                </div>
+                <div class="layui-form-item row">
+                    <label class="layui-form-label ">不参与包邮的地区</label>
+
+                    <div class="layui-input-block" id="card_table">
+
+                        <a class='btn btn-default' href="javascript:;" onclick='addArea(this)'><span class="fa fa-plus"></span> 选择地区</a>
+
+                        <?php foreach( $dispatch_areas as  $row  ){ ?>
+                        <?php $random = random(16); ?>
+                        <!--tpl begin-->
+                        <div class="card mb-3 {$random}">
+                            <div class="card-block">
+                                <div class="mb-3">
+                                    <a href="javascript:" data-index="{$random}" onclick="$(this).parent().parent().parent().remove()" class="del-rules-btn float-right">[-删除条目]</a>
+                                </div>
+                                <input type="hidden" name="random[]" value="{$random}" />
+                                <input type="hidden" class='citys' name="citys[{$random}]" value="{$row['citys']}" />
+                                <input type="hidden" class='citys_code' name="citys_code[{$random}]" value="{$row['citys_code']}" />
+                                <div>
+                                    <span>省份：</span>
+                                    <span class="cityshtml">
+										{$row['citys']}
+										</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--tpl end-->
+                        <?php } ?>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"> </label>
+                    <div class="layui-input-block">
+                        <input type="hidden" name="parameter[limit_goods_list]"  value="{$data['full_free_limit_goods_list']}" id="limit_goods_list" />
+                        <input type="submit" value="提交" lay-submit lay-filter="formDemo" class="btn btn-primary"  />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-default" style='margin-left:10px;' href="{:U('shipping/templates',array('ok'=>'1'))}">返回列表</a>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--地区开始-->
+<style type='text/css'>
+    .province { float:left; position:relative;width:170px; height:35px; line-height:35px;border:1px solid #fff;padding-top: -10px}
+    .province:hover { border:1px solid #a6d2fe;border-bottom:1px solid #a6d2fe; background:#edf6ff;}
+    .province .cityall { margin-top:10px;}
+    .province ul { list-style: outside none none;position:absolute;padding:0;background:#edf6ff;border:1px solid #a6d2fe;display:none;
+        width:auto; width:250px; z-index:999999;left:-1px;top:32px;}
+    .province ul li  { float:left;min-width:60px;margin-left:20px; height:30px;line-height:30px; }
+    .checkbox-inline{
+        margin: 0;
+    }
+</style>
+<div id="modal-areas"  class="modal fade" tabindex="-1">
+    <div class="modal-dialog" style='width: 900px;'>
+        <div class="modal-content">
+            <div class="modal-header"><button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button><h3>选择区域</h3></div>
+            <div class="modal-body" style='' >
+
+                <?php foreach( $areas['province'] as  $value  ){ ?>
+                <?php if( $value['@attributes']['name']=='请选择省份'){ continue; } ?>
+                <div class='province'>
+                    <label class='checkbox-inline' style='margin-left:20px;padding: 0 0 5px 24px;'>
+                        <input type='checkbox' class='cityall' style="" / > {$value['@attributes']['name']}
+                        <span class="citycount" style='color:#ff6600'></span>
+                    </label>
+                    <?php if( count($value['city'])>0){ ?>
+                    <ul style="padding-bottom: 15px;">
+                        <?php foreach( $value['city'] as  $c  ){ ?>
+                        <li>
+                            <label class='checkbox-inline' >
+                                <input type='checkbox' class='city' style='' code="{$c['@attributes']['code']}" city="{$c['@attributes']['name']}" /> {$c['@attributes']['name']}
+                            </label>
+                        </li>
+                        <?php } ?>
+                    </ul>
+                    <?php } ?>
+                </div>
+                <?php } ?>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="modal-footer" style="padding:0px;">
+                <a href="javascript:;" id='btnSubmitArea' class="btn btn-primary" data-dismiss="modal" aria-hidden="true">确定</a>
+                <a href="javascript:;" class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/layuiadmin/layui/layui.js"></script>
+
+<script>
+    layui.config({
+        base: '/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use('index');
+</script>
+
+<script>
+    //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+    var layer = layui.layer;
+    var $;
+
+    var cur_open_div;
+
+    layui.use(['jquery', 'layer','form'], function(){
+        $ = layui.$;
+        var form = layui.form;
+
+        form.on('radio(linktype)', function(data){
+            if (data.value == 2) {
+                $('#typeGroup').show();
+            } else {
+                $('#typeGroup').hide();
+            }
+        });
+        $('#chose_agent_id').click(function(){
+            cur_open_div = $(this).attr('data-input');
+            $.post("{:U('goods/query_normal', array('template' => 'mult'))}", {}, function(shtml){
+                layer.open({
+                    type: 1,
+                    area: '930px',
+                    content: shtml //注意，如果str是object，那么需要字符拼接。
+                });
+            });
+        })
+
+
+
+        $('#chose_link').click(function(){
+            cur_open_div = $(this).attr('data-input');
+            $.post("{:U('util.selecturl', array('ok' => 1))}", {}, function(shtml){
+                layer.open({
+                    type: 1,
+                    area: '930px',
+                    content: shtml //注意，如果str是object，那么需要字符拼接。
+                });
+            });
+        })
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+
+//mult_choose_goodsid limit_goods_list
+            var gd_ar = [];
+            var gd_str = '';
+            $('.mult_choose_goodsid').each(function(){
+                gd_ar.push( $(this).attr('data-gid') );
+            })
+            gd_str = gd_ar.join(',');
+
+            data.field.limit_goods_list = gd_str;
+
+
+            $.ajax({
+                url: data.form.action,
+                type: data.form.method,
+                data: data.field,
+                dataType:'json',
+                success: function (info) {
+
+                    if(info.status == 0)
+                    {
+                        layer.msg(info.result.message,{icon: 1,time: 2000});
+                    }else if(info.status == 1){
+                        var go_url = location.href;
+                        if( info.result.hasOwnProperty("url") )
+                        {
+                            go_url = info.result.url;
+                        }
+
+                        layer.msg('操作成功',{time: 1000,
+                            end:function(){
+                                location.href = info.result.url;
+                            }
+                        });
+                    }
+                }
+            });
+
+            return false;
+        });
+
+
+
+
+    })
+
+</script>
+<script>
+
+    $(function(){
+
+        $('.province').mouseenter(function(){
+            $(this).find('ul').show();
+        }).mouseleave(function(){
+            $(this).find('ul').hide();
+        });
+
+        $('.cityall').click(function(){
+            var checked = $(this).get(0).checked;
+            var citys = $(this).parent().parent().find('.city');
+            citys.each(function(){
+                $(this).get(0).checked = checked;
+            });
+            var count = 0;
+            if(checked){
+                count =  $(this).parent().parent().find('.city:checked').length;
+            }
+            if(count>0){
+                $(this).next().html("(" + count + ")")    ;
+            }
+            else{
+                $(this).next().html("");
+            }
+        });
+        $('.city').click(function(){
+            var checked = $(this).get(0).checked;
+            var cityall = $(this).parent().parent().parent().parent().find('.cityall');
+
+            if(checked){
+                cityall.get(0).checked = true;
+            }
+            var count = cityall.parent().parent().find('.city:checked').length;
+            if(count>0){
+                cityall.next().html("(" + count + ")")    ;
+            }
+            else{
+                cityall.next().html("");
+            }
+        });
+
+    });
+
+    function clearSelects(){
+        $('.city').attr('checked',false).removeAttr('disabled');
+        $('.cityall').attr('checked',false).removeAttr('disabled');
+        $('.citycount').html('');
+    }
+    function editArea(btn){
+        current = $(btn).attr('random');
+        clearSelects();
+        var old_citys = $(btn).prev().val().split(';');
+
+
+        $('.city').each(function(){
+            var parentcheck = false;
+            for(var i in old_citys){
+                if(old_citys[i]==$(this).attr('city')){
+                    parentcheck = true;
+                    $(this).get(0).checked = true;
+                    break;
+                }
+            }
+            if(parentcheck){
+                $(this).parent().parent().parent().parent().find('.cityall').get(0).checked=  true;
+            }
+        });
+
+        $("#modal-areas").modal();
+        var citystrs = '';
+        $('#btnSubmitArea').unbind('click').click(function(){
+            var s_frist = $('.frist').val();
+            if(s_frist =='' || s_frist == 0)
+            {
+                layer.msg('请填写首重');
+                return false;
+            }
+
+            var s_frist_price = $('.frist_price').val();
+            if(s_frist_price =='' || s_frist_price == 0)
+            {
+                layer.msg('请填写首费');
+                return false;
+            }
+
+            var s_second = $('.second').val();
+            if(s_second =='' || s_second == 0)
+            {
+                layer.msg('请填写续重');
+                return false;
+            }
+
+            $('.city:checked').each(function(){
+                citystrs+= $(this).attr('city') +";";
+            });
+            $('.' + current + ' .cityshtml').html(citystrs);
+            $('.' + current + ' .citys').val(citystrs);
+            console.log(2);
+        })
+        var currents = getCurrents(current);
+        currents = currents.split(';');
+        var citys = "";
+        $('.city').each(function(){
+            var parentdisabled =false;
+            for(var i in currents){
+                if(currents[i]!='' && currents[i]==$(this).attr('city')){
+                    $(this).attr('disabled',true);
+                    $(this).parent().parent().parent().parent().find('.cityall').attr('disabled',true);
+                }
+            }
+
+        });
+    }
+
+    function selectAreas(){
+        clearSelects();
+        var old_citys = $('#areas').html().split(';');
+
+
+        $('.city').each(function(){
+            var parentcheck = false;
+            for(var i in old_citys){
+                if(old_citys[i]==$(this).attr('city')){
+                    parentcheck = true;
+                    $(this).get(0).checked = true;
+                    break;
+                }
+            }
+            if(parentcheck){
+                $(this).parent().parent().parent().parent().find('.cityall').get(0).checked=  true;
+            }
+        });
+
+        $("#modal-areas").modal();
+        var citystrs = '';
+        $('#btnSubmitArea').unbind('click').click(function(){
+
+            var s_frist = $('.frist').val();
+            if(s_frist =='' || s_frist == 0)
+            {
+                layer.msg('请填写首重');
+                return false;
+            }
+
+            var s_frist_price = $('.frist_price').val();
+            if(s_frist_price =='' || s_frist_price == 0)
+            {
+                layer.msg('请填写首费');
+                return false;
+            }
+
+            var s_second = $('.second').val();
+            if(s_second =='' || s_second == 0)
+            {
+                layer.msg('请填写续重');
+                return false;
+            }
+
+            $('.city:checked').each(function(){
+                citystrs+= $(this).attr('city') +";";
+            });
+            $('#areas').html(citystrs);
+            $("#selectedareas").val(citystrs);
+        })
+
+    }
+
+    function show_type(flag){
+        if (flag == 2) {
+            $('.show_h').hide();
+            $('.show_n').show();
+        } else {
+            $('.show_h').show();
+            $('.show_n').hide();
+        }
+
+    }
+    $(function(){
+        show_type({$item['type']});
+
+        $(':radio[name=type]').click(function(){
+            var val = $(this).val();
+            $('#card_table .card').remove();
+            show_type(val);
+        })
+
+
+        $(':radio[name=isdispatcharea]').click(function(){
+            var val = $(this).val();
+            var name = '不';
+            if(val == 1) {
+                name = '只';
+            }
+            $("#dispatcharea_name").html(name);
+        })
+
+
+        <?php if( empty($new_area)){ ?>
+            $('.province').mouseenter(function(){
+                $(this).find('ul').show();
+            }).mouseleave(function(){
+                $(this).find('ul').hide();
+            });
+
+            $('.cityall').click(function(){
+                var checked = $(this).get(0).checked;
+                var citys = $(this).parent().parent().find('.city');
+                citys.each(function(){
+                    $(this).get(0).checked = checked;
+                });
+                var count = 0;
+                if (checked){
+                    count = $(this).parent().parent().find('.city:checked').length;
+                }
+                if (count > 0){
+                    $(this).next().html("(" + count + ")");
+                }
+                else{
+                    $(this).next().html("");
+                }
+            });
+
+            $('.city').click(function(){
+                var checked = $(this).get(0).checked;
+                var cityall = $(this).parent().parent().parent().parent().find('.cityall');
+                if (checked){
+                    cityall.get(0).checked = true;
+                }
+                var count = cityall.parent().parent().find('.city:checked').length;
+                if (count > 0){
+                    cityall.next().html("(" + count + ")");
+                }
+                else{
+                    cityall.next().html("");
+                }
+            });
+        <?php } ?>
+    });
+    function getCurrents(withOutRandom){
+        var citys = "";
+        $('.citys').each(function(){
+            var crandom = $(this).prev().val();
+            if (withOutRandom && crandom == withOutRandom){
+                return true;
+            }
+            citys += $(this).val();
+        });
+        return citys;
+    }
+    function getCurrentsCode(withOutRandom){
+        var citys = "";
+        $('.citys_code').each(function(){
+            var crandom = $(this).prev().prev().prev().val();
+            if (withOutRandom && crandom == withOutRandom){
+                return true;
+            }
+            citys += $(this).val();
+        });
+        return citys;
+    }
+    var current = '';
+    function addArea(btn){
+        $(btn).button('loading');
+        $.ajax({
+            url:"{:U('shipping/tpl_full')}",
+            dataType:'json',
+            success:function(json){
+                $(btn).button('reset');
+                current = json.random;
+                var s_type = $('input[name="type"]:checked ').val();
+
+                if(s_type == 1)
+                {
+                    $('.show_type_2').hide();
+                    $('.show_type_1').show();
+                } else{
+                    $('.show_type_1').hide();
+                    $('.show_type_2').show();
+                }
+                $('#card_table').append(json.html);
+                $('#card_table .card').last().hide();
+
+                clearSelects();
+                $("#modal-areas").modal();
+
+                var citystrs = "";
+                var citystrs_codes = "";
+
+            <?php if( empty($new_area)){ ?>
+                    var currents = getCurrents();
+                    currents = currents.split(';');
+                    $('.city').each(function(){
+                        var parentdisabled = false;
+                        for (var i in currents){
+                            if (currents[i] != '' && currents[i] == $(this).attr('city')){
+                                $(this).attr('disabled', true);
+                                $(this).parent().parent().parent().parent().find('.cityall').attr('disabled', true);
+                            }
+                        }
+                    });
+                    $('#btnSubmitArea').unbind('click').click(function(){
+                        var s_frist = $('.frist').val();
+
+
+                        var s_frist_price = $('.frist_price').val();
+
+
+                        var s_second = $('.second').val();
+
+                        $('.city:checked').each(function(){
+                            citystrs += $(this).attr('city') + ";";
+                            citystrs_codes += $(this).attr('code') + ";";
+                        });
+
+                        var s_frist = $('.frist').val();
+
+
+                        var s_frist_price = $('.frist_price').val();
+
+
+                        var s_second = $('.second').val();
+
+
+                        $('.' + current + ' .cityshtml').html(citystrs);
+                        $('.' + current + ' .citys').val(citystrs);
+                        $('.' + current + ' .citys_code').val(citystrs_codes);
+
+
+                        if(s_type == 1)
+                        {
+
+                            var s_first = $('.show_type_1 input[name="frist"]').val();
+                            var s_first_price = $('.show_type_1 input[name="frist_price"]').val();
+                            var s_second = $('.show_type_1 input[name="second"]').val();
+                            var s_second_price = $('.show_type_1 input[name="second_price"]').val();
+
+
+
+                            $('.' + current + 'frist').val(s_first);
+                            $('.' + current + 'frist_price').val(s_first_price);
+                            $('.' + current + 'second').val(s_second);
+                            $('.' + current + 'second_price').val(s_second_price);
+
+                        } else{
+                            var s_first = $('.show_type_2 input[name="frist"]').val();
+                            var s_first_price = $('.show_type_2 input[name="frist_price"]').val();
+                            var s_second = $('.show_type_2 input[name="second"]').val();
+                            var s_second_price = $('.show_type_2 input[name="second_price"]').val();
+
+
+                            $('.' + current + 'frist').val(s_first);
+                            $('.' + current + 'frist_price').val(s_first_price);
+                            $('.' + current + 'second').val(s_second);
+                            $('.' + current + 'second_price').val(s_second_price);
+                        }
+
+                        $('#card_table .card').last().show();
+
+                        console.log(3);
+                    })
+                    <?php  }else{  ?>
+                    var currents = getCurrentsCode();
+                    currents = currents.split(';');
+
+                    var parentdisabled = false;
+                    for (var i in currents){
+                        var area_info = currents[i].split(' ');
+                        if(area_info[0]) {
+                            $('#ch_pcode'+area_info[0]).prop("disabled",true);
+                        }
+                        if(area_info[1]) {
+                            $('#ch_ccode'+area_info[1]).prop("disabled",true);
+                        }
+                        if(area_info[2]) {
+                            $('#ch_acode'+area_info[2]).prop("disabled",true);
+                        }
+                    }
+
+                    $('#btnSubmitArea').unbind('click').click(function(){
+                        update_area();
+                        var city_html = $('#city_info').html();
+                        var area_html = $('#area_info').html();
+
+                        var s_frist = $('.frist').val();
+                        if(s_frist =='' || s_frist == 0)
+                        {
+                            //layer.msg('请填写首重');
+                            //return false;
+                        }
+
+                        var s_frist_price = $('.frist_price').val();
+                        if(s_frist_price =='' || s_frist_price == 0)
+                        {
+                            //layer.msg('请填写首费');
+                            //return false;
+                        }
+
+                        var s_second = $('.second').val();
+                        if(s_second =='' || s_second == 0)
+                        {
+                            //layer.msg('请填写续重');
+                            //return false;
+                        }
+
+
+
+
+                        if (city_html && area_html) {
+                            $('.' + current + ' .cityshtml').html(city_html);
+                            $('.' + current + ' .citys').val(city_html);
+                            $('.' + current + ' .citys_code').val(area_html);
+                            $('#card_table .card').last().show();
+
+                        }
+
+
+                    })
+                    <?php } ?>
+
+                var calculatetype1 = $('input[name="type"]:checked ').val();
+                show_type(calculatetype1);
+            }
+        })
+    }
+
+</script>
+<script>
+    function cancle_bind(obj,sdiv)
+    {
+        $('#'+sdiv).val('');
+        $(obj).parent().parent().remove();
+    }
+</script>
+</body>

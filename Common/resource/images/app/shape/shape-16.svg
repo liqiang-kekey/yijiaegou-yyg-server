@@ -1,0 +1,34 @@
+seriesLevel as $seriesValueIdx => $seriesValue) {
+                switch ($seriesValueIdx) {
+                    case 'ptCount':
+                        $pointCount = self::getAttribute($seriesValue, 'val', 'integer');
+                        break;
+                    case 'formatCode':
+                        $formatCode = (string) $seriesValue;
+                        break;
+                    case 'pt':
+                        $pointVal = self::getAttribute($seriesValue, 'idx', 'integer');
+                        if ($dataType == 's') {
+                            $seriesVal[$pointVal][] = (string) $seriesValue->v;
+                        } else {
+                            $seriesVal[$pointVal][] = (float) $seriesValue->v;
+                        }
+                        break;
+                }
+            }
+        }
+
+        return array(
+            'formatCode'    => $formatCode,
+            'pointCount'    => $pointCount,
+            'dataValues'    => $seriesVal
+        );
+    }
+
+    private static function parseRichText($titleDetailPart = null)
+    {
+        $value = new PHPExcel_RichText();
+
+        foreach ($titleDetailPart as $titleDetailElementKey => $titleDetailElement) {
+            if (isset($titleDetailElement->t)) {
+                $obj

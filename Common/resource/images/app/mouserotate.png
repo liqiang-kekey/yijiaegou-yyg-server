@@ -1,0 +1,100 @@
+成功',{time: 1000,
+						end:function(){
+							location.href = info.result.url;
+						}
+					}); 
+				}
+			}
+		})
+	});
+
+
+	form.on('switch(undowngroundingsitch)', function(data){
+	  
+	  var s_url = $(this).attr('data-href')
+	  
+	  var grounding = 1;
+	  if(data.elem.checked)
+	  {
+		grounding = 1;
+	  }else{
+		grounding = 0;
+	  }
+	  
+	  $.ajax({
+			url:s_url,
+			type:'post',
+			dataType:'json',
+			data:{value:grounding},
+			success:function(info){
+			
+				if(info.status == 0)
+				{
+					layer.msg(info.result.message,{time: 1000,
+						end:function(){
+							location.href = info.result.url;
+						}
+					}); 
+					
+				}else if(info.status == 1){
+					var go_url = location.href;
+					if( info.result.hasOwnProperty("url") )
+					{
+						go_url = info.result.url;
+					}
+					
+					layer.msg('操作成功',{time: 1000,
+						end:function(){
+							location.href = info.result.url;
+						}
+					}); 
+				}
+			}
+		})
+	});
+
+  
+form.on('switch(is_index_showsitch)', function(data){
+	  
+	  var s_url = $(this).attr('data-href')
+	  
+	  var is_index_show = 1;
+	  if(data.elem.checked)
+	  {
+		is_index_show = 1;
+	  }else{
+		is_index_show = 0;
+	  }
+	  
+	  $.ajax({
+			url:s_url,
+			type:'post',
+			dataType:'json',
+			data:{value:is_index_show},
+			success:function(info){
+			
+				if(info.status == 0)
+				{
+					layer.msg(info.result.message,{time: 1000,
+						end:function(){
+							location.href = info.result.url;
+						}
+					}); 
+				}else if(info.status == 1){
+					var go_url = location.href;
+					if( info.result.hasOwnProperty("url") )
+					{
+						go_url = info.result.url;
+					}
+					
+					layer.msg('操作成功',{time: 1000,
+						end:function(){
+							location.href = info.result.url;
+						}
+					}); 
+				}
+			}
+		})
+	});
+
+  

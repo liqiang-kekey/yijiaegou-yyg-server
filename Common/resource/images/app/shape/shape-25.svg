@@ -1,0 +1,38 @@
+ail->dLbls)) {
+            if (isset($chartDetail->dLbls->howLegendKey)) {
+                $plotAttributes['showLegendKey'] = self::getAttribute($chartDetail->dLbls->showLegendKey, 'val', 'string');
+            }
+            if (isset($chartDetail->dLbls->showVal)) {
+                $plotAttributes['showVal'] = self::getAttribute($chartDetail->dLbls->showVal, 'val', 'string');
+            }
+            if (isset($chartDetail->dLbls->showCatName)) {
+                $plotAttributes['showCatName'] = self::getAttribute($chartDetail->dLbls->showCatName, 'val', 'string');
+            }
+            if (isset($chartDetail->dLbls->showSerName)) {
+                $plotAttributes['showSerName'] = self::getAttribute($chartDetail->dLbls->showSerName, 'val', 'string');
+            }
+            if (isset($chartDetail->dLbls->showPercent)) {
+                $plotAttributes['showPercent'] = self::getAttribute($chartDetail->dLbls->showPercent, 'val', 'string');
+            }
+            if (isset($chartDetail->dLbls->showBubbleSize)) {
+                $plotAttributes['showBubbleSize'] = self::getAttribute($chartDetail->dLbls->showBubbleSize, 'val', 'string');
+            }
+            if (isset($chartDetail->dLbls->showLeaderLines)) {
+                $plotAttributes['showLeaderLines'] = self::getAttribute($chartDetail->dLbls->showLeaderLines, 'val', 'string');
+            }
+        }
+
+        return $plotAttributes;
+    }
+
+    private static function setChartAttributes($plotArea, $plotAttributes)
+    {
+        foreach ($plotAttributes as $plotAttributeKey => $plotAttributeValue) {
+            switch ($plotAttributeKey) {
+                case 'showLegendKey':
+                    $plotArea->setShowLegendKey($plotAttributeValue);
+                    break;
+                case 'showVal':
+                    $plotArea->setShowVal($plotAttributeValue);
+                    break;
+         
